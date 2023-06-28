@@ -103,10 +103,7 @@ async def dl_link(event):
             return os.remove(out)
     except BaseException:
         pass
-    if capp == "":
-        cap = bb
-    else:
-        cap = capp
+    cap = bb if capp == "" else capp
     ees = dt.now()
     ttt = time.time()
     await nn.delete()
@@ -132,7 +129,7 @@ async def dl_link(event):
     org = int(Path(dl).stat().st_size)
     com = int(Path(out).stat().st_size)
     pe = 100 - ((com / org) * 100)
-    per = str(f"{pe:.2f}") + "%"
+    per = f'{str(f"{pe:.2f}")}%'
     eees = dt.now()
     x = dtime
     xx = ts(int((ees - es).seconds) * 1000)
@@ -155,13 +152,11 @@ async def encod(event):
         if not event.is_reply:
             await event.reply("`Reply to Media to Start Compress !!`")
             return
-            uni = await event.get_reply_message()
-        if hasattr(uni.media, "document"):
-            if not uni.media.document.mime_type.startswith(
-                ("video", "application/octet-stream")
-            ):
-                return
-        else:
+        if not hasattr(uni.media, "document"):
+            return
+        if not uni.media.document.mime_type.startswith(
+            ("video", "application/octet-stream")
+        ):
             return
         try:
             oc = event.fwd_from.from_id.user_id
@@ -181,9 +176,7 @@ async def encod(event):
                 nam = event.text.split()[1]
             except BaseException:
                 pass
-            if not nam:
-                name = uni.file.name
-            else:
+            if nam:
                 name = nam
                 if not name:
                     name = "video_" + dt.now().isoformat("_", "seconds") + ".mp4"
@@ -191,11 +184,13 @@ async def encod(event):
                 return await xxx.edit(
                     "♨️ Aᴅᴅᴇᴅ Iɴ Qᴜᴇᴜᴇ ♨️!! \n\n `Please Wait` , Compress will Start Soon ..."
                 )
+            else:
+                name = uni.file.name
         WORKING.append(1)
         xxx = await event.reply("📥 `Downloading ...` 📥")
         s = dt.now()
         ttt = time.time()
-        dir = f"downloads/"
+        dir = "downloads/"
         try:
             if hasattr(event.media, "document"):
                 file = event.media.document
@@ -233,7 +228,7 @@ async def encod(event):
         es = dt.now()
         kk = dl.split("/")[-1]
         aa = kk.split(".")[-1]
-        rr = f"encode"
+        rr = "encode"
         bb = kk.replace(f".{aa}", " [Encoded].mkv")
         out = f"{rr}/{bb}"
         thum = "thumb.jpg"
@@ -282,7 +277,7 @@ async def encod(event):
         org = int(Path(dl).stat().st_size)
         com = int(Path(out).stat().st_size)
         pe = 100 - ((com / org) * 100)
-        per = str(f"{pe:.2f}") + "%"
+        per = f'{str(f"{pe:.2f}")}%'
         eees = dt.now()
         x = dtime
         xx = ts(int((ees - es).seconds) * 1000)

@@ -46,30 +46,29 @@ def stdr(seconds: int) -> str:
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)
     if len(str(minutes)) == 1:
-        minutes = "0" + str(minutes)
+        minutes = f"0{str(minutes)}"
     if len(str(hours)) == 1:
-        hours = "0" + str(hours)
+        hours = f"0{str(hours)}"
     if len(str(seconds)) == 1:
-        seconds = "0" + str(seconds)
-    dur = (
-        ((str(hours) + ":") if hours else "00:")
-        + ((str(minutes) + ":") if minutes else "00:")
+        seconds = f"0{str(seconds)}"
+    return (
+        (f"{str(hours)}:" if hours else "00:")
+        + (f"{str(minutes)}:" if minutes else "00:")
         + ((str(seconds)) if seconds else "")
     )
-    return dur
 
 
 def ts(milliseconds: int) -> str:
-    seconds, milliseconds = divmod(int(milliseconds), 1000)
+    seconds, milliseconds = divmod(milliseconds, 1000)
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)
     days, hours = divmod(hours, 24)
     tmp = (
-        ((str(days) + "d, ") if days else "")
-        + ((str(hours) + "h, ") if hours else "")
-        + ((str(minutes) + "m, ") if minutes else "")
-        + ((str(seconds) + "s, ") if seconds else "")
-        + ((str(milliseconds) + "ms, ") if milliseconds else "")
+        (f"{str(days)}d, " if days else "")
+        + (f"{str(hours)}h, " if hours else "")
+        + (f"{str(minutes)}m, " if minutes else "")
+        + (f"{str(seconds)}s, " if seconds else "")
+        + (f"{str(milliseconds)}ms, " if milliseconds else "")
     )
     return tmp[:-2]
 
@@ -83,7 +82,7 @@ def hbs(size):
     while size > power:
         size /= power
         raised_to_pow += 1
-    return str(round(size, 2)) + " " + dict_power_n[raised_to_pow] + "B"
+    return f"{str(round(size, 2))} {dict_power_n[raised_to_pow]}B"
 
 
 No_Flood = {}
@@ -105,8 +104,8 @@ async def progress(current, total, event, start, type_of_ps, file=None):
         speed = current / diff
         time_to_completion = round((total - current) / speed) * 1000
         progress_str = "`[{0}{1}] {2}%`\n\n".format(
-            "".join(["◆" for i in range(math.floor(percentage / 5))]),
-            "".join(["◇" for i in range(20 - math.floor(percentage / 5))]),
+            "".join(["◆" for _ in range(math.floor(percentage / 5))]),
+            "".join(["◇" for _ in range(20 - math.floor(percentage / 5))]),
             round(percentage, 2),
         )
         tmp = (
@@ -120,11 +119,9 @@ async def progress(current, total, event, start, type_of_ps, file=None):
         )
         try:
             if file:
-                await event.edit(
-                    "`✦ {}`\n\n`File Name: {}`\n\n{}".format(type_of_ps, file, tmp)
-                )
+                await event.edit(f"`✦ {type_of_ps}`\n\n`File Name: {file}`\n\n{tmp}")
             else:
-                await event.edit("`✦ {}`\n\n{}".format(type_of_ps, tmp))
+                await event.edit(f"`✦ {type_of_ps}`\n\n{tmp}")
         except errors.EditMessageRequest as e:
             LOGS.info("Flood wait for ", e.seconds)
             await asyncio.sleep(15)
@@ -284,10 +281,7 @@ async def fast_download(e, download_url, filename=None):
         await asyncio.sleep(e.x)
 
     async def _maybe_await(value):
-        if inspect.isawaitable(value):
-            return await value
-        else:
-            return value
+        return await value if inspect.isawaitable(value) else value
 
     async with aiohttp.ClientSession() as session:
         async with session.get(download_url, timeout=None) as response:

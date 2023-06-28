@@ -134,16 +134,7 @@ async def _(e):
     USED = hbs(used)
     FREE = hbs(free)
     await e.reply(
-        "**TOTAL DISK SPACE**: `{}`\n**USED**: `{}`\n**FREE**: {}\n**UPlOAD**: `{}`\n**DOWNLOAD**: `{}`\n**CPU**: `{}%`\n**RAM**: `{}%`\n**DISK**: `{}%`".format(
-            TOTAL,
-            USED,
-            FREE,
-            upload,
-            down,
-            cpuUsage,
-            memory,
-            disk,
-        )
+        f"**TOTAL DISK SPACE**: `{TOTAL}`\n**USED**: `{USED}`\n**FREE**: {FREE}\n**UPlOAD**: `{upload}`\n**DOWNLOAD**: `{down}`\n**CPU**: `{cpuUsage}%`\n**RAM**: `{memory}%`\n**DISK**: `{disk}%`"
     )
 
 
@@ -252,7 +243,7 @@ async def _(e):
 
 
 async def something():
-    for i in itertools.count():
+    for _ in itertools.count():
         try:
             if not WORKING and QUEUE:
                 # user = int(SUDO_USERS.split()[0])
@@ -271,7 +262,7 @@ async def something():
                     else:
                         dl, file = QUEUE[list(QUEUE.keys())[0]]
                         tt = time.time()
-                        dl = "downloads/" + dl
+                        dl = f"downloads/{dl}"
                         with open(dl, "wb") as f:
                             ok = await download_file(
                                 client=bot,
@@ -352,7 +343,7 @@ async def something():
                 org = int(Path(dl).stat().st_size)
                 com = int(Path(out).stat().st_size)
                 pe = 100 - ((com / org) * 100)
-                per = str(f"{pe:.2f}") + "%"
+                per = f'{str(f"{pe:.2f}")}%'
                 eees = dt.now()
                 x = dtime
                 xx = ts(int((ees - es).seconds) * 1000)
