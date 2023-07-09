@@ -25,7 +25,7 @@ async def up(event):
     v = ts(int((ed - uptime).seconds) * 1000)
     ms = (ed - stt).microseconds / 1000
     p = f"🌤 Pɪɴɢ = `{ms}ms` 🌥"
-    await event.reply(f"🚦 Uᴘᴛɪᴍᴇ : {v} 🚦 \n\n" + p)
+    await event.reply(f"🚦 Uᴘᴛɪᴍᴇ : {v} 🚦 \n\n{p}")
 
 
 async def start(event):
